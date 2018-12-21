@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// TODO Document Reader. Maybe rename?
 public final class Reader {
 
     /**
@@ -19,14 +20,12 @@ public final class Reader {
     }
 
     /**
-     * TODO finish documenting Reader
-     *
      * @param path Relative or absolute path
-     * @return An array containing all the read files as strings
+     * @return An array containing all the readLines files as strings
      * @throws IOException If the path does not point to a directory
      */
     public static String[] readJavaFiles(final String path) throws IOException {
-        // TODO Only read .java files
+        // TODO Only readLines .java files
         var directory = new File(path);
         var filter = new FilenameFilter() {
             public boolean accept(File dir, String name) {
@@ -47,5 +46,19 @@ public final class Reader {
         }
         String[] result = new String[contents.size()];
         return contents.toArray(result);
+    }
+
+    public static List<String> readJavaKeywords() throws IOException {
+        return readLines("data\\java\\keywords.txt");
+    }
+
+    public static List<String> readJavaSeparators() throws IOException {
+        return readLines("data\\java\\separators.txt");
+    }
+
+    private static List<String> readLines(final String path) throws IOException {
+        Path filePath = Paths.get(path);
+        return Files.lines(filePath).collect(Collectors.toList());
+
     }
 }
