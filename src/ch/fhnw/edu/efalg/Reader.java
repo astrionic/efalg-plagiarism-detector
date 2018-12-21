@@ -1,6 +1,7 @@
 package ch.fhnw.edu.efalg;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,10 +25,15 @@ public final class Reader {
      * @return An array containing all the read files as strings
      * @throws IOException If the path does not point to a directory
      */
-    public static String[] readFiles(String path) throws IOException {
+    public static String[] readJavaFiles(String path) throws IOException {
         // TODO Only read .java files
-        File directory = new File(path);
-        File[] files = directory.listFiles();
+        var directory = new File(path);
+        var filter = new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith(".java");
+            }
+        };
+        File[] files = directory.listFiles(filter);
         if(files == null) {
             throw new IOException("Not a directory.");
         }
