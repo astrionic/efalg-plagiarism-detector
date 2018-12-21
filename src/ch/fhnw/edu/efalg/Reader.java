@@ -33,9 +33,11 @@ public final class Reader {
         }
         List<String> contents = new ArrayList<>(files.length);
         for(File file : files) {
-            Path filePath = Paths.get(file.getAbsolutePath());
-            String content = Files.lines(filePath).collect(Collectors.joining("\n"));
-            contents.add(content);
+            if(file.isFile() && file.canRead()) {
+                Path filePath = Paths.get(file.getAbsolutePath());
+                String content = Files.lines(filePath).collect(Collectors.joining("\n"));
+                contents.add(content);
+            }
         }
         String[] result = new String[contents.size()];
         return contents.toArray(result);
