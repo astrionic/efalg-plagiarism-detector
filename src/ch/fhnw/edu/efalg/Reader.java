@@ -5,7 +5,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.Paths;s
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +25,7 @@ public final class Reader {
      * @return An array containing all the read files as strings
      * @throws IOException If the path does not point to a directory
      */
-    public static String[] readJavaFiles(String path) throws IOException {
+    public static String[] readJavaFiles(final String path) throws IOException {
         // TODO Only read .java files
         var directory = new File(path);
         var filter = new FilenameFilter() {
