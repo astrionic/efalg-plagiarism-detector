@@ -11,16 +11,13 @@ public class Main {
             String[] strings = Reader.readJavaFiles("input");
             var keywords = Reader.readJavaKeywords();
             var separators = Reader.readJavaSeparators();
-            Tokeniser t = new Tokeniser(keywords, separators);
-            List<Token> tokens = t.tokenise(strings[0]);
-            /*
+            Tokeniser tokeniser = new Tokeniser(keywords, separators);
+            List<Token> tokens = tokeniser.tokenise(strings[0]);
             for(Token t : tokens) {
-                System.out.println("\"" + t.toString() + "\"");
+                System.out.println(t.toString());
             }
-            */
         } catch(IOException e) {
             e.printStackTrace();
         }
-
     }
 }
