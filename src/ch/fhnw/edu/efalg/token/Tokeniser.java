@@ -7,28 +7,11 @@ import java.util.regex.Pattern;
 // TODO Document Tokeniser
 public final class Tokeniser {
     private final List<String> keywords;
-    private final char[] separators;
+    private final Pattern separators;
 
     public Tokeniser(List<String> keywords, char[] separators) {
         this.keywords = new ArrayList<>(keywords);
-        this.separators = new char[separators.length];
-        System.arraycopy(separators, 0, this.separators, 0, separators.length);
-    }
-
-    public List<Token> tokenise(final String s) {
-        var noComment = removeCommentsAndStrings(s);
-        // TODO Tokenise
-        var p = Pattern.compile("\\s+|\n|(?<=})|(?=})|(?<=\\{)|(?=\\{)|(?<=\\[)|(?=\\[)|(?<=])|(?=])|(?<=;)|(?=;)|(?<=,)|(?=,)|(?<=:)|(?=:)|(?<=\\.)|(?=\\.)");
-        var x = p.split(noComment);
-        for(var y : x) {
-            System.out.println("Token \"" + y.replaceAll("\n", "") + "\"");
-        }
-        List<Token> tokens = new ArrayList<>();
-        return tokens;
-    }
-
-    private enum Reading {
-        StringLiteral, LineComment, BlockComment, Other
+        this.separators = createSeparatorPattern(separators);
     }
 
     private static String removeCommentsAndStrings(final String s) {
@@ -83,5 +66,29 @@ public final class Tokeniser {
             }
         }
         return sb.toString();
+    }
+
+    private Pattern createSeparatorPattern(char[] separators) {
+        var sb = new StringBuilder("\\s+|\n");
+        for(char c : separators) {
+            sb.append("|(?<=\\").append(c).append(")");
+            sb.append("|(?=\\").append(c).append(")");
+        }
+        return Pattern.compile(sb.toString());
+    }
+
+    public List<Token> tokenise(final String s) {
+        var noComment = removeCommentsAndStrings(s);
+        // TODO Tokenise
+        var x = separators.split(noComment);
+        for(var y : x) {
+            System.out.println("Token \"" + y.replaceAll("\n", "") + "\"");
+        }
+        List<Token> tokens = new ArrayList<>();
+        return tokens;
+    }
+
+    private enum Reading {
+        StringLiteral, LineComment, BlockComment, Other
     }
 }
