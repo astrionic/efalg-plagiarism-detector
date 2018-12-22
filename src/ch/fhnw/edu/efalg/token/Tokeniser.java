@@ -2,20 +2,27 @@ package ch.fhnw.edu.efalg.token;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 // TODO Document Tokeniser
 public final class Tokeniser {
     private final List<String> keywords;
-    private final List<String> separators;
+    private final char[] separators;
 
-    public Tokeniser(List<String> keywords, List<String> separators) {
+    public Tokeniser(List<String> keywords, char[] separators) {
         this.keywords = new ArrayList<>(keywords);
-        this.separators = new ArrayList<>(separators);
+        this.separators = new char[separators.length];
+        System.arraycopy(separators, 0, this.separators, 0, separators.length);
     }
 
     public List<Token> tokenise(final String s) {
         var noComment = removeCommentsAndStrings(s);
         // TODO Tokenise
+        var p = Pattern.compile("\\s+|\n|(?<=})|(?=})|(?<=\\{)|(?=\\{)|(?<=\\[)|(?=\\[)|(?<=])|(?=])|(?<=;)|(?=;)|(?<=,)|(?=,)|(?<=:)|(?=:)|(?<=\\.)|(?=\\.)");
+        var x = p.split(noComment);
+        for(var y : x) {
+            System.out.println("Token \"" + y.replaceAll("\n", "") + "\"");
+        }
         List<Token> tokens = new ArrayList<>();
         return tokens;
     }

@@ -25,7 +25,6 @@ public final class Reader {
      * @throws IOException If the path does not point to a directory
      */
     public static String[] readJavaFiles(final String path) throws IOException {
-        // TODO Only readLines .java files
         var directory = new File(path);
         var filter = new FilenameFilter() {
             public boolean accept(File dir, String name) {
@@ -49,16 +48,13 @@ public final class Reader {
     }
 
     public static List<String> readJavaKeywords() throws IOException {
-        return readLines("data\\java\\keywords.txt");
-    }
-
-    public static List<String> readJavaSeparators() throws IOException {
-        return readLines("data\\java\\separators.txt");
-    }
-
-    private static List<String> readLines(final String path) throws IOException {
-        Path filePath = Paths.get(path);
+        Path filePath = Paths.get("data\\java_keywords.txt");
         return Files.lines(filePath).collect(Collectors.toList());
+    }
 
+    public static char[] readJavaSeparators() throws IOException {
+        Path filePath = Paths.get("data\\java_separators.txt");
+        var s = new String(Files.readAllBytes(filePath));
+        return s.toCharArray();
     }
 }
