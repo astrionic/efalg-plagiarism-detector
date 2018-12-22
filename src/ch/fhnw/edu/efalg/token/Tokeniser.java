@@ -31,6 +31,12 @@ public final class Tokeniser {
         return toTokenList(tokenStrings);
     }
 
+    public List<TokenType> tokeniseEnum(final String s) {
+        final String sWithoutComments = removeCommentsAndStrings(s);
+        final String[] tokenStrings = separatorPattern.split(sWithoutComments);
+        return toTokenEnumList(tokenStrings);
+    }
+
     private enum Reading {
         StringLiteral, LineComment, BlockComment, Other
     }
@@ -87,6 +93,21 @@ public final class Tokeniser {
             }
         }
         return sb.toString();
+    }
+
+    private List<TokenType> toTokenEnumList(String[] tokenStrings) {
+        final var tokens = new ArrayList<TokenType>();
+        for(var tokenString : tokenStrings) {
+            if(separators.contains(tokenString)) {
+                tokens.add(TokenType.Separator);
+            } else if(keywords.contains(tokenString)) {
+                tokens.add(TokenType.Keyword);
+            } else if(!"".equals(tokenString)) {
+                tokens.add(TokenType.Identifier);
+            }
+        }
+        return tokens;
+
     }
 
     private List<Token> toTokenList(String[] tokenStrings) {
