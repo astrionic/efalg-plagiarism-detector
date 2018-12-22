@@ -54,6 +54,7 @@ public final class Reader {
 
     public static char[] readJavaSeparators() throws IOException {
         Path filePath = Paths.get("data\\java_separators.txt");
+        // TODO Reading without specifying encoding might break things
         var s = new String(Files.readAllBytes(filePath));
         return s.toCharArray();
     }
