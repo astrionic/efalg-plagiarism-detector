@@ -25,6 +25,7 @@ public final class Tokeniser {
         return Pattern.compile(sb.toString());
     }
 
+    // TODO Remove and rename new method if this isn't used anymore
     public List<Token> tokenise(final String s) {
         final String sWithoutComments = removeCommentsAndStrings(s);
         final String[] tokenStrings = separatorPattern.split(sWithoutComments);
@@ -110,6 +111,7 @@ public final class Tokeniser {
 
     }
 
+    // TODO Remove and rename new method if this isn't used anymore
     private List<Token> toTokenList(String[] tokenStrings) {
         final var tokens = new ArrayList<Token>();
         for(var tokenString : tokenStrings) {
