@@ -6,21 +6,40 @@ import java.util.stream.Collectors;
 
 // TODO Document Tokeniser
 public final class Tokeniser {
-    private final Set<String> keywords; // TODO Convert to set?
+    private final Set<String> keywords;
     private final Set<String> separators;
     private final Pattern separatorPattern;
 
-    public Tokeniser(Collection<String> keywords, Collection<Character> separators) {
+    public Tokeniser(final Collection<String> keywords, final Collection<Character> separators) {
         this.keywords = new HashSet<>(keywords);
         this.separators = separators.stream().map(Object::toString).collect(Collectors.toSet());
         this.separatorPattern = createSeparatorPattern(separators);
     }
 
+    private static Pattern createSeparatorPattern(final Collection<Character> separators) {
+        final var sb = new StringBuilder("\\s+|\n");
+        for(char c : separators) {
+            sb.append("|(?<=\\").append(c).append(")");
+            sb.append("|(?=\\").append(c).append(")");
+        }
+        return Pattern.compile(sb.toString());
+    }
+
+    public List<Token> tokenise(final String s) {
+        final String sWithoutComments = removeCommentsAndStrings(s);
+        final String[] tokenStrings = separatorPattern.split(sWithoutComments);
+        return toTokenList(tokenStrings);
+    }
+
+    private enum Reading {
+        StringLiteral, LineComment, BlockComment, Other
+    }
+
     private static String removeCommentsAndStrings(final String s) {
         // Remove comments and replace string literals
         // TODO Maybe also replace char literals?
-        var chars = s.toCharArray();
-        var sb = new StringBuilder();
+        final var chars = s.toCharArray();
+        final var sb = new StringBuilder();
         var state = Reading.Other;
         for(int i = 0; i < chars.length; i++) {
             switch(state) {
@@ -70,23 +89,8 @@ public final class Tokeniser {
         return sb.toString();
     }
 
-    private Pattern createSeparatorPattern(final Collection<Character> separators) {
-        final var sb = new StringBuilder("\\s+|\n");
-        for(char c : separators) {
-            sb.append("|(?<=\\").append(c).append(")");
-            sb.append("|(?=\\").append(c).append(")");
-        }
-        return Pattern.compile(sb.toString());
-    }
-
-    public List<Token> tokenise(final String s) {
-        String sWithoutComments = removeCommentsAndStrings(s);
-        String[] tokenStrings = separatorPattern.split(sWithoutComments);
-        return toTokenList(tokenStrings);
-    }
-
     private List<Token> toTokenList(String[] tokenStrings) {
-        var tokens = new ArrayList<Token>();
+        final var tokens = new ArrayList<Token>();
         for(var tokenString : tokenStrings) {
             if(separators.contains(tokenString)) {
                 tokens.add(new Separator(tokenString));
@@ -97,9 +101,5 @@ public final class Tokeniser {
             }
         }
         return tokens;
-    }
-
-    private enum Reading {
-        StringLiteral, LineComment, BlockComment, Other
     }
 }
