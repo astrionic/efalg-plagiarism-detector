@@ -3,10 +3,10 @@ package ch.fhnw.edu.efalg;
 import java.util.Objects;
 
 /**
- * Represents a 4-gram of {@link Token}s. A FourGram is a contiguous sequence of four items from a text sample.
+ * Represents a 4-gram of {@link Tokeniser.Token}s. A FourGram is a contiguous sequence of four items from a text sample.
  */
 public class FourGram {
-    private final Token one, two, three, four;
+    private final Tokeniser.Token one, two, three, four;
 
     /**
      * Creates a new 4-gram with the given contents.
@@ -16,7 +16,7 @@ public class FourGram {
      * @param three Third item
      * @param four  Fourth item
      */
-    FourGram(Token one, Token two, Token three, Token four) {
+    FourGram(Tokeniser.Token one, Tokeniser.Token two, Tokeniser.Token three, Tokeniser.Token four) {
         this.one = one;
         this.two = two;
         this.three = three;

@@ -27,7 +27,9 @@ public final class PlagiarismDetector {
      */
     public void calculateSimilarities(String[] javaPrograms) {
         final var tokenLists = tokenise(javaPrograms);
-        final var fourGramLists = tokenLists.stream().map(PlagiarismDetector::toFourGramList).collect(Collectors.toList());
+        final var fourGramLists = tokenLists.stream()
+                .map(PlagiarismDetector::toFourGramList)
+                .collect(Collectors.toList());
         final var inv = calculateInvertedIndex(fourGramLists);
         similarityMatrix = calculateSimilarityMatrix(inv, fourGramLists.size());
     }
@@ -75,8 +77,8 @@ public final class PlagiarismDetector {
      * @param programs An array with each element being a string of a Java program
      * @return A list, with each element being a list of tokens of the corresponding program
      */
-    private List<List<Token>> tokenise(final String[] programs) {
-        final var tokenLists = new ArrayList<List<Token>>(programs.length);
+    private List<List<Tokeniser.Token>> tokenise(final String[] programs) {
+        final var tokenLists = new ArrayList<List<Tokeniser.Token>>(programs.length);
         for(var program : programs) {
             tokenLists.add(tokeniser.tokenise(program));
         }
@@ -89,7 +91,7 @@ public final class PlagiarismDetector {
      * @param tokens A list of tokens
      * @return The list of 4-grams corresponding to the given list of tokens
      */
-    private static List<FourGram> toFourGramList(final List<Token> tokens) {
+    private static List<FourGram> toFourGramList(final List<Tokeniser.Token> tokens) {
         final var fourGrams = new ArrayList<FourGram>();
         for(int i = 0; i + 3 < tokens.size(); i++) {
             fourGrams.add(new FourGram(tokens.get(i), tokens.get(i + 1), tokens.get(i + 2), tokens.get(i + 3)));

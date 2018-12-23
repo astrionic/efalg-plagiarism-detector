@@ -138,4 +138,11 @@ public final class Tokeniser {
         return tokens;
 
     }
+
+    /**
+     * Represents the types of tokens which the {@link Tokeniser} could potentially create.
+     */
+    public enum Token {
+        Keyword, Identifier, Separator
+    }
 }
