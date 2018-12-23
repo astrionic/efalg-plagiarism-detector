@@ -46,7 +46,7 @@ public final class PlagiarismDetector {
     private List<List<Token>> tokenise(final String[] programs) {
         final var tokenLists = new ArrayList<List<Token>>(programs.length);
         for(var program : programs) {
-            tokenLists.add(tokeniser.tokeniseEnum(program));
+            tokenLists.add(tokeniser.tokenise(program));
         }
         return tokenLists;
     }
