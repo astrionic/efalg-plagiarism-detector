@@ -27,7 +27,7 @@ public final class PlagiarismDetector {
      */
     public void calculateSimilarities(String[] javaPrograms) {
         final var tokenLists = tokenise(javaPrograms);
-        final var fourGramLists = tokenLists.stream().map(this::toFourGramList).collect(Collectors.toList());
+        final var fourGramLists = tokenLists.stream().map(PlagiarismDetector::toFourGramList).collect(Collectors.toList());
         final var inv = calculateInvertedIndex(fourGramLists);
         similarityMatrix = calculateSimilarityMatrix(inv, fourGramLists.size());
     }
