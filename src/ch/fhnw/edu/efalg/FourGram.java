@@ -4,9 +4,20 @@ import ch.fhnw.edu.efalg.token.Token;
 
 import java.util.Objects;
 
+/**
+ * Represents a FourGram of {@code Token}s. A FourGram is a contiguous sequence of four items from a text sample.
+ */
 public class FourGram {
     private final Token one, two, three, four;
 
+    /**
+     * Creates a new {@code FourGram} with the given contents.
+     *
+     * @param one   First item
+     * @param two   Second item
+     * @param three Third item
+     * @param four  Fourth item
+     */
     FourGram(Token one, Token two, Token three, Token four) {
         this.one = one;
         this.two = two;
