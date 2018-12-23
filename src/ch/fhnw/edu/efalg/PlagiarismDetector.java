@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class PlagiarismDetector {
+public final class PlagiarismDetector {
     private final Tokeniser tokeniser;
 
     public PlagiarismDetector() throws IOException {
@@ -19,33 +19,9 @@ public class PlagiarismDetector {
     public float[][] calculateSimilarities() throws IOException {
         final var programs = Reader.readJavaFiles("input");
         final var tokenLists = tokenise(programs);
-        final List<List<FourGram>> fourGramLists = tokenLists.stream().map(this::toFourGramList).collect(Collectors.toList()); // TODO Array?
-
-        // Inverted index TODO Put into its own method?
-        final var inv = new HashMap<FourGram, Set<Integer>>();
-        for(int i = 0; i < fourGramLists.size(); i++) {
-            for(var fourGram : fourGramLists.get(i)) {
-                if(!inv.containsKey(fourGram)) {
-                    inv.put(fourGram, new HashSet<>());
-                }
-                inv.get(fourGram).add(i);
-            }
-        }
-        // Calculate similarity matrix TODO Also put this into its own method?
-        var n = tokenLists.size();
-        var s = new float[n][n];
-        for(int i = 0; i < n; i++) {
-            for(int j = 0; j < n; j++) {
-                int a = 0, b = 0, ab = 0;
-                for(Set<Integer> x : inv.values()) {
-                    if(x.contains(i) && x.contains(j)) ab++;
-                    else if(x.contains(i)) a++;
-                    else if(x.contains(j)) b++;
-                }
-                s[i][j] = (float)ab / (a + b + ab);
-            }
-        }
-        return s;
+        final var fourGramLists = tokenLists.stream().map(this::toFourGramList).collect(Collectors.toList());
+        final var inv = calculateInvertedIndex(fourGramLists);
+        return calculateSimilarityMatrix(inv, fourGramLists.size());
     }
 
     private List<List<TokenType>> tokenise(String[] programs) throws IOException {
@@ -63,13 +39,33 @@ public class PlagiarismDetector {
         }
         return fourGrams;
     }
-
-    private List<List<FourGram>> toFourGramLists(List<List<TokenType>> tokenLists) {
-        final var fourGramLists = new ArrayList<List<FourGram>>();
-        for(List<TokenType> tokenList : tokenLists) {
-            fourGramLists.add(toFourGramList(tokenList));
+    
+    private static Map<FourGram, Set<Integer>> calculateInvertedIndex(List<List<FourGram>> fourGramLists) {
+        final var invertedIndices = new HashMap<FourGram, Set<Integer>>();
+        for(int i = 0; i < fourGramLists.size(); i++) {
+            for(var fourGram : fourGramLists.get(i)) {
+                if(!invertedIndices.containsKey(fourGram)) {
+                    invertedIndices.put(fourGram, new HashSet<>());
+                }
+                invertedIndices.get(fourGram).add(i);
+            }
         }
-        return fourGramLists;
+        return invertedIndices;
     }
 
+    private static float[][] calculateSimilarityMatrix(Map<FourGram, Set<Integer>> invertedIndices, int n) {
+        var similarityMatrix = new float[n][n];
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                int a = 0, b = 0, ab = 0;
+                for(Set<Integer> x : invertedIndices.values()) {
+                    if(x.contains(i) && x.contains(j)) ab++;
+                    else if(x.contains(i)) a++;
+                    else if(x.contains(j)) b++;
+                }
+                similarityMatrix[i][j] = (float)ab / (a + b + ab);
+            }
+        }
+        return similarityMatrix;
+    }
 }
