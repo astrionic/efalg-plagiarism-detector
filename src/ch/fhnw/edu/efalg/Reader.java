@@ -24,17 +24,8 @@ public final class Reader {
      * @return An array containing all the readLines files as strings
      * @throws IOException If the path does not point to a directory
      */
-    public static String[] readJavaFiles(final String path) throws IOException {
-        final var directory = new File(path);
-        final var filter = new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return name.toLowerCase().endsWith(".java");
-            }
-        };
-        final File[] files = directory.listFiles(filter);
-        if(files == null) {
-            throw new IOException("Not a directory.");
-        }
+    public static String[] readProgramFiles(final String path) throws IOException {
+        final var files = readJavaFilesInDirectory(path);
         final var contents = new ArrayList<>(files.length);
         for(File file : files) {
             if(file.isFile() && file.canRead()) {
@@ -47,13 +38,39 @@ public final class Reader {
         return contents.toArray(result);
     }
 
-    public static List<String> readJavaKeywords() throws IOException {
-        final Path filePath = Paths.get("data\\java_keywords.txt");
+    public static String[] readProgramNames(final String path) throws IOException {
+        final var files = readJavaFilesInDirectory(path);
+        final var names = new ArrayList<>(files.length);
+        for(File file : files) {
+            if(file.isFile() && file.canRead()) {
+                names.add(file.getName());
+            }
+        }
+        final var result = new String[names.size()];
+        return names.toArray(result);
+    }
+
+    private static File[] readJavaFilesInDirectory(final String path) throws IOException {
+        final var directory = new File(path);
+        final var filter = new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith(".java");
+            }
+        };
+        final File[] files = directory.listFiles(filter);
+        if(files == null) {
+            throw new IOException("Not a directory.");
+        }
+        return files;
+    }
+
+    public static List<String> readKeywords(final String path) throws IOException {
+        final Path filePath = Paths.get(path);
         return Files.lines(filePath).collect(Collectors.toList());
     }
 
-    public static List<Character> readJavaSeparators() throws IOException {
-        final var filePath = Paths.get("data\\java_separators.txt");
+    public static List<Character> readSeparators(final String path) throws IOException {
+        final var filePath = Paths.get(path);
         // TODO Reading without specifying encoding might break things
         final var s = new String(Files.readAllBytes(filePath));
         return s.chars().mapToObj(i -> (char)i).collect(Collectors.toList());
