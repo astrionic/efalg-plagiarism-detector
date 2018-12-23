@@ -16,12 +16,12 @@ public class PlagiarismDetector {
         this.tokeniser = new Tokeniser(keywords, separators);
     }
 
-    public void calculateSimilarities() throws IOException {
+    public float[][] calculateSimilarities() throws IOException {
         final var programs = Reader.readJavaFiles("input");
         final var tokenLists = tokenise(programs);
         final List<List<FourGram>> fourGramLists = tokenLists.stream().map(this::toFourGramList).collect(Collectors.toList()); // TODO Array?
 
-        // Inverted index TODO Put into its own method?2
+        // Inverted index TODO Put into its own method?
         final var inv = new HashMap<FourGram, Set<Integer>>();
         for(int i = 0; i < fourGramLists.size(); i++) {
             for(var fourGram : fourGramLists.get(i)) {
@@ -31,9 +31,21 @@ public class PlagiarismDetector {
                 inv.get(fourGram).add(i);
             }
         }
-        // Calculate similarity matrix
-
-        // TODO Finish calculateSimilarities implementation
+        // Calculate similarity matrix TODO Also put this into its own method?
+        var n = tokenLists.size();
+        var s = new float[n][n];
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                int a = 0, b = 0, ab = 0;
+                for(Set<Integer> x : inv.values()) {
+                    if(x.contains(i) && x.contains(j)) ab++;
+                    else if(x.contains(i)) a++;
+                    else if(x.contains(j)) b++;
+                }
+                s[i][j] = (float)ab / (a + b + ab);
+            }
+        }
+        return s;
     }
 
     private List<List<TokenType>> tokenise(String[] programs) throws IOException {
