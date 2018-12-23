@@ -1,6 +1,6 @@
 package ch.fhnw.edu.efalg;
 
-import ch.fhnw.edu.efalg.token.TokenType;
+import ch.fhnw.edu.efalg.token.Token;
 import ch.fhnw.edu.efalg.token.Tokeniser;
 
 import java.util.*;
@@ -46,15 +46,15 @@ public final class PlagiarismDetector {
         return sb.toString();
     }
 
-    private List<List<TokenType>> tokenise(final String[] programs) {
-        final var tokenLists = new ArrayList<List<TokenType>>(programs.length);
+    private List<List<Token>> tokenise(final String[] programs) {
+        final var tokenLists = new ArrayList<List<Token>>(programs.length);
         for(var program : programs) {
             tokenLists.add(tokeniser.tokeniseEnum(program));
         }
         return tokenLists;
     }
 
-    private List<FourGram> toFourGramList(final List<TokenType> tokens) {
+    private List<FourGram> toFourGramList(final List<Token> tokens) {
         final var fourGrams = new ArrayList<FourGram>();
         for(int i = 0; i + 3 < tokens.size(); i++) {
             fourGrams.add(new FourGram(tokens.get(i), tokens.get(i + 1), tokens.get(i + 2), tokens.get(i + 3)));

@@ -25,14 +25,7 @@ public final class Tokeniser {
         return Pattern.compile(sb.toString());
     }
 
-    // TODO Remove and rename new method if this isn't used anymore
-    public List<Token> tokenise(final String s) {
-        final String sWithoutComments = removeCommentsAndStrings(s);
-        final String[] tokenStrings = separatorPattern.split(sWithoutComments);
-        return toTokenList(tokenStrings);
-    }
-
-    public List<TokenType> tokeniseEnum(final String s) {
+    public List<Token> tokeniseEnum(final String s) {
         final String sWithoutComments = removeCommentsAndStrings(s);
         final String[] tokenStrings = separatorPattern.split(sWithoutComments);
         return toTokenEnumList(tokenStrings);
@@ -96,33 +89,18 @@ public final class Tokeniser {
         return sb.toString();
     }
 
-    private List<TokenType> toTokenEnumList(String[] tokenStrings) {
-        final var tokens = new ArrayList<TokenType>();
-        for(var tokenString : tokenStrings) {
-            if(separators.contains(tokenString)) {
-                tokens.add(TokenType.Separator);
-            } else if(keywords.contains(tokenString)) {
-                tokens.add(TokenType.Keyword);
-            } else if(!"".equals(tokenString)) {
-                tokens.add(TokenType.Identifier);
-            }
-        }
-        return tokens;
-
-    }
-
-    // TODO Remove and rename new method if this isn't used anymore
-    private List<Token> toTokenList(String[] tokenStrings) {
+    private List<Token> toTokenEnumList(String[] tokenStrings) {
         final var tokens = new ArrayList<Token>();
         for(var tokenString : tokenStrings) {
             if(separators.contains(tokenString)) {
-                tokens.add(new Separator(tokenString));
+                tokens.add(Token.Separator);
             } else if(keywords.contains(tokenString)) {
-                tokens.add(new Keyword(tokenString));
+                tokens.add(Token.Keyword);
             } else if(!"".equals(tokenString)) {
-                tokens.add(new Identifier(tokenString));
+                tokens.add(Token.Identifier);
             }
         }
         return tokens;
+
     }
 }

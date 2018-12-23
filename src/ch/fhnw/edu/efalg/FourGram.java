@@ -1,13 +1,13 @@
 package ch.fhnw.edu.efalg;
 
-import ch.fhnw.edu.efalg.token.TokenType;
+import ch.fhnw.edu.efalg.token.Token;
 
 import java.util.Objects;
 
 public class FourGram {
-    private final TokenType one, two, three, four;
+    private final Token one, two, three, four;
 
-    FourGram(TokenType one, TokenType two, TokenType three, TokenType four) {
+    FourGram(Token one, Token two, Token three, Token four) {
         this.one = one;
         this.two = two;
         this.three = three;
