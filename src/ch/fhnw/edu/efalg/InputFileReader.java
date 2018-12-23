@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// TODO Document Reader. Also maybe rename?
-public final class Reader {
+// TODO Document InputFileReader. Also maybe rename?
+public final class InputFileReader {
 
     /**
      * Private constructor to prevent the creation of instances of this class.
      */
-    private Reader() {
+    private InputFileReader() {
     }
 
     /**
