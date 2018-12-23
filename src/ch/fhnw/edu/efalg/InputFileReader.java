@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// TODO Document InputFileReader. Also maybe rename?
+/**
+ * Contains static methods to read necessary content from files.
+ */
 public final class InputFileReader {
 
     /**
@@ -20,7 +22,9 @@ public final class InputFileReader {
     }
 
     /**
-     * @param path Relative or absolute path
+     * Reads the content of all files ending in .java from the given directory
+     *
+     * @param path Relative or absolute path to the directory
      * @return An array containing all the readLines files as strings
      * @throws IOException If the path does not point to a directory
      */
@@ -38,6 +42,13 @@ public final class InputFileReader {
         return contents.toArray(result);
     }
 
+    /**
+     * Reads the names of all files ending in .java from the given directory
+     *
+     * @param path Relative or absolute path to the directory
+     * @return An array containing all the readLines files as strings
+     * @throws IOException If the path does not point to a directory
+     */
     public static String[] readProgramNames(final String path) throws IOException {
         final var files = readJavaFilesInDirectory(path);
         final var names = new ArrayList<>(files.length);
@@ -50,6 +61,13 @@ public final class InputFileReader {
         return names.toArray(result);
     }
 
+    /**
+     * Returns all files ending in .java from a given directory
+     *
+     * @param path Relative or absolute path to the directory
+     * @return Array containing the read {@code File} objects
+     * @throws IOException If the path does not point to a directory
+     */
     private static File[] readJavaFilesInDirectory(final String path) throws IOException {
         final var directory = new File(path);
         final var filter = new FilenameFilter() {
@@ -64,14 +82,28 @@ public final class InputFileReader {
         return files;
     }
 
+    /**
+     * Reads keywords from the file at the given path. Each line of the file should contain exactly one keyword.
+     *
+     * @param path Relative or absolute path to the file
+     * @return A {@code List} containing the read keywords
+     * @throws IOException If the file could not be read
+     */
     public static List<String> readKeywords(final String path) throws IOException {
         final Path filePath = Paths.get(path);
         return Files.lines(filePath).collect(Collectors.toList());
     }
 
+    /**
+     * Reads separators from the file at the given path. The file should only contain the separators and nothing else.
+     *
+     * @param path Relative or absolute path to the file
+     * @return A {@code List} containing the read separators
+     * @throws IOException If the file could not be read
+     */
     public static List<Character> readSeparators(final String path) throws IOException {
         final var filePath = Paths.get(path);
-        // TODO Reading without specifying encoding might break things
+        // Reading without specifying encoding might break things
         final var s = new String(Files.readAllBytes(filePath));
         return s.chars().mapToObj(i -> (char)i).collect(Collectors.toList());
     }
