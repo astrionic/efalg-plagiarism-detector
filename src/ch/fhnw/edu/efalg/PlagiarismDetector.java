@@ -3,28 +3,50 @@ package ch.fhnw.edu.efalg;
 import ch.fhnw.edu.efalg.token.TokenType;
 import ch.fhnw.edu.efalg.token.Tokeniser;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public final class PlagiarismDetector {
     private final Tokeniser tokeniser;
+    private float[][] similarityMatrix;
 
-    public PlagiarismDetector() throws IOException {
-        final var keywords = Reader.readJavaKeywords();
-        final var separators = Reader.readJavaSeparators();
-        this.tokeniser = new Tokeniser(keywords, separators);
+    public PlagiarismDetector(Tokeniser tokeniser) {
+        this.tokeniser = tokeniser;
     }
 
-    public float[][] calculateSimilarities() throws IOException {
-        final var programs = Reader.readJavaFiles("input");
-        final var tokenLists = tokenise(programs);
+    public void calculateSimilarities(String[] javaPrograms) {
+        final var tokenLists = tokenise(javaPrograms);
         final var fourGramLists = tokenLists.stream().map(this::toFourGramList).collect(Collectors.toList());
         final var inv = calculateInvertedIndex(fourGramLists);
-        return calculateSimilarityMatrix(inv, fourGramLists.size());
+        similarityMatrix = calculateSimilarityMatrix(inv, fourGramLists.size());
     }
 
-    private List<List<TokenType>> tokenise(String[] programs) throws IOException {
+    public float[][] getSimilarityMatrix() {
+        int n = similarityMatrix.length;
+        float[][] copy = new float[n][];
+        for(int i = 0; i < n; i++) {
+            copy[i] = Arrays.copyOf(similarityMatrix[i], n);
+        }
+        return copy;
+    }
+
+    public String getSimilarityMatrixAsString() {
+        var sb = new StringBuilder();
+        for(int j = 0; j < similarityMatrix[0].length; j++) {
+            sb.append(String.format("%7d", j));
+        }
+        sb.append("\n");
+        for(int i = 0; i < similarityMatrix.length; i++) {
+            sb.append(String.format("%2d", i));
+            for(int j = 0; j < similarityMatrix[i].length; j++) {
+                sb.append(String.format("%7.3f", similarityMatrix[i][j]));
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    private List<List<TokenType>> tokenise(String[] programs) {
         final var tokenLists = new ArrayList<List<TokenType>>(programs.length);
         for(var program : programs) {
             tokenLists.add(tokeniser.tokeniseEnum(program));
@@ -39,11 +61,11 @@ public final class PlagiarismDetector {
         }
         return fourGrams;
     }
-    
+
     private static Map<FourGram, Set<Integer>> calculateInvertedIndex(List<List<FourGram>> fourGramLists) {
         final var invertedIndices = new HashMap<FourGram, Set<Integer>>();
         for(int i = 0; i < fourGramLists.size(); i++) {
-            for(var fourGram : fourGramLists.get(i)) {
+            for(final var fourGram : fourGramLists.get(i)) {
                 if(!invertedIndices.containsKey(fourGram)) {
                     invertedIndices.put(fourGram, new HashSet<>());
                 }
@@ -54,11 +76,11 @@ public final class PlagiarismDetector {
     }
 
     private static float[][] calculateSimilarityMatrix(Map<FourGram, Set<Integer>> invertedIndices, int n) {
-        var similarityMatrix = new float[n][n];
+        final var similarityMatrix = new float[n][n];
         for(int i = 0; i < n; i++) {
             for(int j = 0; j < n; j++) {
                 int a = 0, b = 0, ab = 0;
-                for(Set<Integer> x : invertedIndices.values()) {
+                for(final Set<Integer> x : invertedIndices.values()) {
                     if(x.contains(i) && x.contains(j)) ab++;
                     else if(x.contains(i)) a++;
                     else if(x.contains(j)) b++;
