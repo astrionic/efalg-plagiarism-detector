@@ -1,4 +1,4 @@
-package ch.fhnw.edu.efalg.token;
+package ch.fhnw.edu.efalg;
 
 import java.util.*;
 import java.util.regex.Pattern;

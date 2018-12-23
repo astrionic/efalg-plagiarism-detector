@@ -1,6 +1,6 @@
 import ch.fhnw.edu.efalg.PlagiarismDetector;
 import ch.fhnw.edu.efalg.InputFileReader;
-import ch.fhnw.edu.efalg.token.Tokeniser;
+import ch.fhnw.edu.efalg.Tokeniser;
 
 import java.io.IOException;
 

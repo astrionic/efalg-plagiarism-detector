@@ -1,7 +1,5 @@
 package ch.fhnw.edu.efalg;
 
-import ch.fhnw.edu.efalg.token.Token;
-
 import java.util.Objects;
 
 /**

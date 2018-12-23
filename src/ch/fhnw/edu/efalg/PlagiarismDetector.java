@@ -1,8 +1,5 @@
 package ch.fhnw.edu.efalg;
 
-import ch.fhnw.edu.efalg.token.Token;
-import ch.fhnw.edu.efalg.token.Tokeniser;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
