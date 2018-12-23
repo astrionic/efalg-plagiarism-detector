@@ -35,7 +35,7 @@ public final class Reader {
         if(files == null) {
             throw new IOException("Not a directory.");
         }
-        final List<String> contents = new ArrayList<>(files.length);
+        final var contents = new ArrayList<>(files.length);
         for(File file : files) {
             if(file.isFile() && file.canRead()) {
                 Path filePath = Paths.get(file.getAbsolutePath());
@@ -43,7 +43,7 @@ public final class Reader {
                 contents.add(content);
             }
         }
-        final String[] result = new String[contents.size()];
+        final var result = new String[contents.size()];
         return contents.toArray(result);
     }
 
@@ -53,7 +53,7 @@ public final class Reader {
     }
 
     public static List<Character> readJavaSeparators() throws IOException {
-        final Path filePath = Paths.get("data\\java_separators.txt");
+        final var filePath = Paths.get("data\\java_separators.txt");
         // TODO Reading without specifying encoding might break things
         final var s = new String(Files.readAllBytes(filePath));
         return s.chars().mapToObj(i -> (char)i).collect(Collectors.toList());

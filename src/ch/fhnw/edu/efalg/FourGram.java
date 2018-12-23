@@ -5,9 +5,9 @@ import ch.fhnw.edu.efalg.token.TokenType;
 import java.util.Objects;
 
 public class FourGram {
-    public final TokenType one, two, three, four;
+    private final TokenType one, two, three, four;
 
-    public FourGram(TokenType one, TokenType two, TokenType three, TokenType four) {
+    FourGram(TokenType one, TokenType two, TokenType three, TokenType four) {
         this.one = one;
         this.two = two;
         this.three = three;
@@ -15,7 +15,7 @@ public class FourGram {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
         FourGram fourGram = (FourGram)o;

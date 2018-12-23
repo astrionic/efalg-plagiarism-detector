@@ -46,7 +46,7 @@ public final class PlagiarismDetector {
         return sb.toString();
     }
 
-    private List<List<TokenType>> tokenise(String[] programs) {
+    private List<List<TokenType>> tokenise(final String[] programs) {
         final var tokenLists = new ArrayList<List<TokenType>>(programs.length);
         for(var program : programs) {
             tokenLists.add(tokeniser.tokeniseEnum(program));
@@ -54,7 +54,7 @@ public final class PlagiarismDetector {
         return tokenLists;
     }
 
-    private List<FourGram> toFourGramList(List<TokenType> tokens) {
+    private List<FourGram> toFourGramList(final List<TokenType> tokens) {
         final var fourGrams = new ArrayList<FourGram>();
         for(int i = 0; i + 3 < tokens.size(); i++) {
             fourGrams.add(new FourGram(tokens.get(i), tokens.get(i + 1), tokens.get(i + 2), tokens.get(i + 3)));
@@ -62,7 +62,7 @@ public final class PlagiarismDetector {
         return fourGrams;
     }
 
-    private static Map<FourGram, Set<Integer>> calculateInvertedIndex(List<List<FourGram>> fourGramLists) {
+    private static Map<FourGram, Set<Integer>> calculateInvertedIndex(final List<List<FourGram>> fourGramLists) {
         final var invertedIndices = new HashMap<FourGram, Set<Integer>>();
         for(int i = 0; i < fourGramLists.size(); i++) {
             for(final var fourGram : fourGramLists.get(i)) {
@@ -75,7 +75,7 @@ public final class PlagiarismDetector {
         return invertedIndices;
     }
 
-    private static float[][] calculateSimilarityMatrix(Map<FourGram, Set<Integer>> invertedIndices, int n) {
+    private static float[][] calculateSimilarityMatrix(final Map<FourGram, Set<Integer>> invertedIndices, final int n) {
         final var similarityMatrix = new float[n][n];
         for(int i = 0; i < n; i++) {
             for(int j = 0; j < n; j++) {
