@@ -60,8 +60,6 @@ public final class Tokeniser {
      * @return The string with comments removed and string literals replaced
      */
     private static String removeCommentsAndStrings(final String s) {
-        // Remove comments and replace string literals
-        // TODO Maybe also replace char literals?
         final var chars = s.toCharArray();
         final var sb = new StringBuilder();
         var state = Reading.Other;

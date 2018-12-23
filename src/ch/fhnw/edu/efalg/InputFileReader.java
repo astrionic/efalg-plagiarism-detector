@@ -65,7 +65,7 @@ public final class InputFileReader {
      * Returns all files ending in .java from a given directory
      *
      * @param path Relative or absolute path to the directory
-     * @return Array containing the read {@code File} objects
+     * @return Array containing the read {@link File} objects
      * @throws IOException If the path does not point to a directory
      */
     private static File[] readJavaFilesInDirectory(final String path) throws IOException {
@@ -86,7 +86,7 @@ public final class InputFileReader {
      * Reads keywords from the file at the given path. Each line of the file should contain exactly one keyword.
      *
      * @param path Relative or absolute path to the file
-     * @return A {@code List} containing the read keywords
+     * @return A {@link List} containing the read keywords
      * @throws IOException If the file could not be read
      */
     public static List<String> readKeywords(final String path) throws IOException {
@@ -98,7 +98,7 @@ public final class InputFileReader {
      * Reads separators from the file at the given path. The file should only contain the separators and nothing else.
      *
      * @param path Relative or absolute path to the file
-     * @return A {@code List} containing the read separators
+     * @return A {@link List} containing the read separators
      * @throws IOException If the file could not be read
      */
     public static List<Character> readSeparators(final String path) throws IOException {
