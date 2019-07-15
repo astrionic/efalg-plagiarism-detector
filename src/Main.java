@@ -19,7 +19,6 @@ public class Main {
             final var keywords = InputFileReader.readKeywords(KEYWORDS_FILE_PATH);
             System.out.println(String.format("successfully loaded %d keywords.", keywords.size()));
 
-
             System.out.print(String.format("Reading separators from file \"%s\" ... ", SEPARATORS_FILE_PATH));
             final var separators = InputFileReader.readSeparators(SEPARATORS_FILE_PATH);
             System.out.println(String.format("successfully loaded %d separators.\n", separators.size()));
